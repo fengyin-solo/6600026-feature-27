@@ -25,6 +25,28 @@ function handleRunAlignment() {
     alert('请选择两个不同的序列');
     return;
   }
+
+  const s1 = store.sequences.find(s => s.id === store.selectedSeq1);
+  const s2 = store.sequences.find(s => s.id === store.selectedSeq2);
+
+  if (!s1 || !s2) return;
+
+  if (!s1.data || !s2.data) {
+    alert('序列数据不能为空，请检查输入');
+    return;
+  }
+
+  const len1 = s1.data.length;
+  const len2 = s2.data.length;
+  const maxLen = Math.max(len1, len2);
+  const minLen = Math.min(len1, len2);
+
+  if (maxLen > 0 && minLen / maxLen < 0.3) {
+    if (!confirm(`两个序列长度差异较大（${len1} bp vs ${len2} bp），是否继续比对？')) {
+      return;
+    }
+  }
+
   store.runAlignment(store.selectedSeq1, store.selectedSeq2, store.currentAlgorithm);
 }
 
